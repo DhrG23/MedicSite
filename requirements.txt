@@ -1,0 +1,14 @@
+sounddevice
+soundfile
+Flask
+newsapi-python
+gunicorn
+firebase-admin
+gradio
+google-generativeai
+keras
+librosa
+numpy
+newsapi
+tensorflow
+pillow

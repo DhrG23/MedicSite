@@ -1,0 +1,33 @@
+body
+        #word {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #frff;
+            font-weight: bold;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #score {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #fff;
+        }
+        #status {
+            margin-top: 10px;
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+            visibility: hidden;
+        }
