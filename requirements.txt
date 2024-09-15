@@ -1,4 +1,4 @@
-sounddevice
+pyaudio
 soundfile
 Flask
 newsapi-python

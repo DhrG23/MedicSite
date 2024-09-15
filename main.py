@@ -1,4 +1,4 @@
-import sounddevice as sd
+import pyaudio
 import soundfile as sf
 import os
 from PIL import Image
@@ -241,13 +241,32 @@ def record_audio():
     samplerate = 48000
 
     try:
-        # Record audio in memory
-        recording = sd.rec(int(samplerate * duration), samplerate=samplerate, channels=1, dtype='int16')
-        sd.wait()
+        # Initialize PyAudio
+        p = pyaudio.PyAudio()
+        # Open a stream
+        stream = p.open(format=pyaudio.paInt16,
+                        channels=1,
+                        rate=samplerate,
+                        input=True,
+                        frames_per_buffer=1024)
+
+        # Record audio
+        frames = []
+        for _ in range(int(samplerate / 1024 * duration)):
+            data = stream.read(1024)
+            frames.append(data)
+
+        # Stop and close the stream
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        # Convert frames to numpy array
+        audio_data = np.frombuffer(b''.join(frames), dtype=np.int16)
 
         # Save to in-memory buffer (BytesIO)
         audio_buffer = BytesIO()
-        sf.write(audio_buffer, recording, samplerate, format='WAV')
+        sf.write(audio_buffer, audio_data, samplerate, format='WAV')
         audio_buffer.seek(0)
         prediction = predict_respiratory_disease(trained_model, audio_buffer)
         return render_template('lungcancer/result.html', prediction=prediction)
@@ -255,7 +274,6 @@ def record_audio():
     except Exception as e:
         print(f"Error during recording or prediction: {str(e)}")
         return render_template('lungcancer/error.html', message="An error occurred during audio processing.")
-
 
 @app.route("/reaction")
 def reaction():
